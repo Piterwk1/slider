@@ -118,7 +118,74 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   return newRequire;
 })({"src/my-index.js":[function(require,module,exports) {
+function Slider(slider) {
+  if (!(slider instanceof Element)) throw new Error('no slider passed in'); // create variables
 
+  var prev;
+  var current;
+  var next; // select elements needed for slider
+
+  var slides = slider.querySelector('.slides');
+  var prevButton = slider.querySelector('.goToPrev');
+  var nextButton = slider.querySelector('.goToNext');
+
+  function startSlider() {
+    current = slider.querySelector('.current') || slides.firstElementChild;
+    prev = current.previousElementSibling || slides.lastElementChild;
+    next = current.nextElementSibling || slides.nextElementChild;
+    console.log({
+      current: current,
+      prev: prev,
+      next: next
+    });
+  }
+
+  function applyClasses() {
+    current.classList.add('current');
+    prev.classList.add('prev');
+    next.classList.add('next');
+  }
+
+  function move(direction) {
+    // remove classes
+    // current.classList.remove('current');
+    // prev.classList.remove('prev');
+    // next.classList.remove('next');
+    var classesToRemove = ['prev', 'current', 'next'];
+    [prev, current, next].forEach(function (el) {
+      var _el$classList;
+
+      return (_el$classList = el.classList).remove.apply(_el$classList, classesToRemove);
+    });
+
+    if (direction === 'back') {
+      // make a new arrey of the new values and destructure them over into new variables
+      var _ref = [prev.previousElementSibling || slides.lastElementChild, prev, current];
+      prev = _ref[0];
+      current = _ref[1];
+      next = _ref[2];
+    } else {
+      var _ref2 = [current, next, next.nextElementSibling || slides.firstElementChild];
+      prev = _ref2[0];
+      current = _ref2[1];
+      next = _ref2[2];
+    }
+
+    applyClasses();
+  } // when this slides is created, run the start slider function
+
+
+  startSlider();
+  applyClasses(); // event lsteners
+
+  prevButton.addEventListener('click', function () {
+    return move('back');
+  });
+  nextButton.addEventListener('click', move);
+}
+
+var mySlider = Slider(document.querySelector('.slider'));
+var dogSlider = Slider(document.querySelector('.dog-slider'));
 },{}],"node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -147,7 +214,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59971" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63366" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
